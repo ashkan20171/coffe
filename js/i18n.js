@@ -14,19 +14,30 @@ const T={
 'لطفاً یک میز انتخاب کنید':'Please choose a table.','رزرو با موفقیت ثبت شد':'Reservation confirmed successfully.','به سبد خرید اضافه شد':'Added to cart.','سبد خرید خالی است':'Your cart is empty.','نظر شما ثبت شد':'Your review was submitted.','ثبت‌نام آزمایشی انجام شد':'Demo registration completed.','صندلی شما رزرو شد':'Your seat has been reserved.','به لیست شرکت‌کنندگان اضافه شدی':'You were added to the attendee list.','Gift Card ساخته شد':'Gift Card created.'
 };
 const A={'فضای کافه و قهوه تخصصی':'Café interior and specialty coffee','QR منوی کافه':'Café menu QR code'};
-let busy=false;
-function translateText(s){let trim=s.trim(); if(!trim)return s; let out=T[trim]; if(!out){
-  let m=trim.match(/^میز (\d+)$/); if(m)out='Table '+m[1];
-  else if(trim.startsWith('تخفیف:')) out=trim.replace('تخفیف:','Discount:');
-  else if(trim.startsWith('برای ')) out=trim.replace('برای ','For ');
-  else return s;
-} return s.replace(trim,out);}
-function apply(root=document){if(busy)return;busy=true; const en=localStorage.lang!=='fa'; document.documentElement.lang=en?'en':'fa';document.documentElement.dir=en?'ltr':'rtl';document.body?.classList.toggle('en',en);
- if(en){let w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let nodes=[];while(w.nextNode())nodes.push(w.currentNode);nodes.forEach(n=>{if(!['SCRIPT','STYLE'].includes(n.parentElement?.tagName))n.nodeValue=translateText(n.nodeValue)});root.querySelectorAll?.('[alt]').forEach(e=>{if(A[e.alt])e.alt=A[e.alt]});}
- busy=false;}
-function setLanguage(lang){localStorage.lang=lang;location.reload();}
+// Stage 10: event-driven localization. No MutationObserver and no reload loops.
+const originals=new WeakMap();
+function translateText(s){const trim=s.trim();if(!trim)return s;let out=T[trim];if(!out){const m=trim.match(/^میز (\d+)$/);if(m)out='Table '+m[1];else if(trim.startsWith('تخفیف:'))out=trim.replace('تخفیف:','Discount:');else return s;}return s.replace(trim,out);}
+function apply(root=document){
+ const lang=localStorage.getItem('lang')==='fa'?'fa':'en';const en=lang==='en';
+ document.documentElement.lang=lang;document.documentElement.dir=en?'ltr':'rtl';document.body?.classList.toggle('en',en);
+ const scope=root.nodeType===9?root.body:root;if(!scope)return;
+ const walker=document.createTreeWalker(scope,NodeFilter.SHOW_TEXT);let node;
+ while((node=walker.nextNode())){
+  const parent=node.parentElement;if(!parent||['SCRIPT','STYLE','NOSCRIPT','TEXTAREA'].includes(parent.tagName))continue;
+  if(!originals.has(node))originals.set(node,node.nodeValue);
+  const original=originals.get(node);const desired=en?translateText(original):original;
+  if(node.nodeValue!==desired)node.nodeValue=desired;
+ }
+ scope.querySelectorAll?.('[alt]').forEach(el=>{if(!el.dataset.originalAlt)el.dataset.originalAlt=el.alt;el.alt=en?(A[el.dataset.originalAlt]||el.dataset.originalAlt):el.dataset.originalAlt});
+ const btn=document.getElementById('langBtn');if(btn){btn.textContent=en?'فارسی':'English';btn.setAttribute('aria-label',en?'Switch to Persian':'تغییر زبان به انگلیسی');}
+}
+function setLanguage(lang){if(!['fa','en'].includes(lang))return;localStorage.setItem('lang',lang);apply();
+ try{if(typeof renderProducts==='function')renderProducts();if(typeof renderCart==='function')renderCart();}catch(e){console.warn('Localized product refresh failed',e)}
+ document.dispatchEvent(new CustomEvent('cafe:languagechange',{detail:{lang}}));
+}
 window.cafeI18n={apply,setLanguage,t:T};
-document.addEventListener('DOMContentLoaded',()=>{if(!localStorage.getItem('lang'))localStorage.setItem('lang','en');apply();const b=document.querySelector('#langBtn');if(b){b.textContent=localStorage.lang!=='fa'?'EN/FA':'FA/EN';b.onclick=()=>setLanguage(localStorage.lang!=='fa'?'fa':'en');b.setAttribute('aria-label',localStorage.lang!=='fa'?'Switch to Persian':'تغییر زبان به انگلیسی');}
- const obs=new MutationObserver(ms=>{if(localStorage.lang!=='fa'&&!busy){for(const m of ms)for(const n of m.addedNodes)if(n.nodeType===1||n.nodeType===3)apply(n.nodeType===1?n:n.parentElement)}});obs.observe(document.body,{childList:true,subtree:true});
+document.addEventListener('DOMContentLoaded',()=>{
+ if(!['fa','en'].includes(localStorage.getItem('lang')))localStorage.setItem('lang','en');
+ apply();const btn=document.getElementById('langBtn');if(btn)btn.addEventListener('click',()=>setLanguage(document.documentElement.lang==='en'?'fa':'en'));
 });
 })();

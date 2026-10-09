@@ -1,0 +1,9 @@
+/* Stage 8: resilient shared navigation */
+.top{position:sticky!important;top:0;z-index:100;background:rgba(35,23,17,.97)!important;backdrop-filter:blur(18px);color:#fff}
+.top .brand,.top .nav a{color:#fff}.top .navlinks a{color:#f6e9d9}.top .navlinks a:hover{color:#f1b975}
+.top .nav{min-height:76px;flex-wrap:wrap}.top .actions{margin-inline-start:auto}.top .iconbtn{color:#fff;background:#ffffff18;border:1px solid #ffffff55}
+.top .navlinks{margin-inline-start:auto}.top .navlinks.open{display:flex}
+.top .mobile-menu-toggle{color:#fff;background:#ffffff18;border:1px solid #ffffff55}
+@media(max-width:860px){.top .navlinks{display:none;order:5;flex-basis:100%;margin:0;padding:12px;background:#332219;border-radius:14px}.top .navlinks.open{display:flex}.top .nav{gap:10px}.top .actions{margin-inline-start:0}.top .mobile-menu-toggle{display:inline-flex;margin-inline-start:auto}}
+@media(max-width:420px){.top .brand{font-size:1rem}.top .actions{gap:4px}.top .iconbtn{width:38px;height:38px}.top .btn{padding:8px 10px;font-size:12px}}
+:focus-visible{outline:3px solid #eab678;outline-offset:3px}

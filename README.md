@@ -48,3 +48,14 @@ Add backend-driven inventory, booking availability, real authentication, secure 
 - Accessible table selection states and local-date reservation minimum.
 - Bilingual English-default interface retained.
 - Important: checkout, reservations, accounts and assistant remain demo/local features; no real backend or payment gateway is connected.
+
+
+## Stage 6 — Interactive CSS 3D
+- Keyboard- and pointer-rotatable CSS 3D coffee cup, reset button, no third-party model dependencies.
+- Bilingual labels based on the saved locale, light/dark theme preference, scroll reveal with reduced-motion fallback.
+- This is a CSS-built 3D illustration, not a photorealistic GLB/WebGL asset.
+- Orders, payment and reservations remain browser-side demos, not production services.
+
+
+## Stage 7 — Visual experience gallery
+Responsive bilingual image gallery with category filters, lazy-loaded local imagery, keyboard-friendly controls, and reduced-motion support. English is the default, Persian switches to RTL. Images are photographic or 3D-styled visuals, not true 3D meshes.
