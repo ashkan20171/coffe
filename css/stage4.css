@@ -1,0 +1,16 @@
+/* Stage 4: dimensional premium visuals */
+:root{--s4-gold:#d7a15d;--s4-dark:#1b110e}
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 78% 38%,#765038 0%,#281913 43%,#120d0b 100%);color:#fff;isolation:isolate}
+.hero::before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 78% 45%,rgba(228,158,88,.25),transparent 45%);pointer-events:none}
+.hero-grid{position:relative;z-index:1;align-items:center;min-height:520px}
+.hero-grid>img{width:min(100%,440px);height:450px;object-fit:cover;border-radius:46% 46% 25% 25%;box-shadow:0 35px 75px #0008,0 0 0 10px #ffffff0b;transform:perspective(950px) rotateY(-9deg);animation:s4float 7s ease-in-out infinite;filter:saturate(1.12)}
+.hero .eyebrow{color:#e8bb80}.hero h1{color:#fff;text-shadow:0 4px 30px #0006}.hero p{color:#f0dcca}
+.hero .chip{background:#ffffff15;border:1px solid #ffffff30;color:#fff;backdrop-filter:blur(10px)}
+#products .card,.grid .card{transition:transform .25s ease,box-shadow .25s ease;transform-style:preserve-3d}
+#products .card:hover,.grid .card:hover{transform:translateY(-8px) perspective(800px) rotateX(2deg);box-shadow:0 22px 40px #29150d30}
+.s4-art-caption{display:flex;align-items:center;gap:10px;margin-top:15px;color:#e6c79f;font-size:.85rem}
+.s4-art-caption::before{content:'✦';color:var(--s4-gold)}
+@keyframes s4float{0%,100%{transform:perspective(950px) rotateY(-9deg) translateY(0)}50%{transform:perspective(950px) rotateY(-6deg) translateY(-12px)}}
+@media(max-width:750px){.hero-grid>img{height:330px;max-width:360px;transform:none;animation:none}.hero-grid{min-height:0}}
+@media(prefers-reduced-motion:reduce){.hero-grid>img{animation:none!important;transform:none!important}#products .card:hover{transform:none}}
+[dir=rtl] .hero-grid>img{transform:perspective(950px) rotateY(9deg)}

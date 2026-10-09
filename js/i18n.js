@@ -21,12 +21,12 @@ function translateText(s){let trim=s.trim(); if(!trim)return s; let out=T[trim];
   else if(trim.startsWith('برای ')) out=trim.replace('برای ','For ');
   else return s;
 } return s.replace(trim,out);}
-function apply(root=document){if(busy)return;busy=true; const en=localStorage.lang==='en'; document.documentElement.lang=en?'en':'fa';document.documentElement.dir=en?'ltr':'rtl';document.body?.classList.toggle('en',en);
+function apply(root=document){if(busy)return;busy=true; const en=localStorage.lang!=='fa'; document.documentElement.lang=en?'en':'fa';document.documentElement.dir=en?'ltr':'rtl';document.body?.classList.toggle('en',en);
  if(en){let w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let nodes=[];while(w.nextNode())nodes.push(w.currentNode);nodes.forEach(n=>{if(!['SCRIPT','STYLE'].includes(n.parentElement?.tagName))n.nodeValue=translateText(n.nodeValue)});root.querySelectorAll?.('[alt]').forEach(e=>{if(A[e.alt])e.alt=A[e.alt]});}
  busy=false;}
 function setLanguage(lang){localStorage.lang=lang;location.reload();}
 window.cafeI18n={apply,setLanguage,t:T};
-document.addEventListener('DOMContentLoaded',()=>{apply();const b=document.querySelector('#langBtn');if(b){b.textContent=localStorage.lang==='en'?'EN/FA':'FA/EN';b.onclick=()=>setLanguage(localStorage.lang==='en'?'fa':'en');b.setAttribute('aria-label',localStorage.lang==='en'?'Switch to Persian':'تغییر زبان به انگلیسی');}
- const obs=new MutationObserver(ms=>{if(localStorage.lang==='en'&&!busy){for(const m of ms)for(const n of m.addedNodes)if(n.nodeType===1||n.nodeType===3)apply(n.nodeType===1?n:n.parentElement)}});obs.observe(document.body,{childList:true,subtree:true});
+document.addEventListener('DOMContentLoaded',()=>{if(!localStorage.getItem('lang'))localStorage.setItem('lang','en');apply();const b=document.querySelector('#langBtn');if(b){b.textContent=localStorage.lang!=='fa'?'EN/FA':'FA/EN';b.onclick=()=>setLanguage(localStorage.lang!=='fa'?'fa':'en');b.setAttribute('aria-label',localStorage.lang!=='fa'?'Switch to Persian':'تغییر زبان به انگلیسی');}
+ const obs=new MutationObserver(ms=>{if(localStorage.lang!=='fa'&&!busy){for(const m of ms)for(const n of m.addedNodes)if(n.nodeType===1||n.nodeType===3)apply(n.nodeType===1?n:n.parentElement)}});obs.observe(document.body,{childList:true,subtree:true});
 });
 })();
