@@ -1,0 +1,6 @@
+/* Stage 11: small, accessible enhancements; preserve the existing design system. */
+.s11-demo{padding:7px 16px;text-align:center;background:#35251c;color:#f9e9d3;font-size:.79rem;line-height:1.5;border-bottom:1px solid #9a7345}
+.s11-back{position:fixed;inset-inline-end:22px;bottom:90px;z-index:90;width:46px;height:46px;border-radius:50%;border:1px solid #bd9360;background:#35251c;color:#fff;font-size:24px;box-shadow:0 8px 24px #0004;opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .2s,transform .2s,visibility .2s;cursor:pointer}
+.s11-back.visible{opacity:1;visibility:visible;transform:translateY(0)}
+.s11-back:focus-visible{outline:3px solid #f5b95d;outline-offset:3px}
+@media(prefers-reduced-motion:reduce){.s11-back{transition:none}}

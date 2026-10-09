@@ -1,0 +1,9 @@
+/* Stage 13: consistent navigation and unobtrusive language status */
+.s13-status{display:inline-flex;align-items:center;gap:.55rem;margin:1rem 0 0;padding:.48rem .8rem;border:1px solid rgba(186,143,83,.35);border-radius:999px;background:rgba(42,30,21,.76);color:#f7e6c9;font-size:.78rem;letter-spacing:.015em;max-width:100%}
+.s13-dot{width:.5rem;height:.5rem;flex:none;background:#cfa66c;border-radius:50%}
+.top{z-index:1000}.top .nav{min-height:70px}.top .navlinks a{white-space:nowrap}.top .actions{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+#langBtn{min-width:5.5rem;cursor:pointer;white-space:nowrap}
+#langBtn:focus-visible,.mobile-menu-toggle:focus-visible,.navlinks a:focus-visible{outline:3px solid #d9ae75;outline-offset:3px}
+[dir="rtl"] .s13-status{direction:rtl}
+@media(max-width:780px){.top .nav{gap:.6rem}.top .actions{gap:.35rem}.top .navlinks{max-height:75vh;overflow-y:auto}.s13-status{margin:.75rem 0}}
+@media(prefers-reduced-motion:reduce){.top *{scroll-behavior:auto!important;transition:none!important}}

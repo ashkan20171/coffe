@@ -13,31 +13,37 @@ const T={
 'اسپرسو اسپشیالتی':'Specialty Espresso','لاته کارامل':'Caramel Latte','کولد برو':'Cold Brew','آیس موکا':'Iced Mocha','چیزکیک قهوه':'Coffee Cheesecake','کروسان بادام':'Almond Croissant','دبل شات با دانه ۱۰۰٪ عربیکا، رُست متوسط':'Double shot with 100% Arabica beans and a medium roast','اسپرسو، شیر بافت‌دار و کارامل دست‌ساز':'Espresso, textured milk, and house-made caramel','عصاره‌گیری سرد ۱۸ ساعته، نرم و شفاف':'18-hour cold extraction with a smooth, clean finish','شکلات تلخ، اسپرسو و شیر سرد':'Dark chocolate, espresso, and chilled milk','چیزکیک خامه‌ای با عطر قهوه':'Creamy cheesecake with an aromatic coffee note','کروسان کره‌ای با کرم بادام':'Buttery croissant filled with almond cream',
 'لطفاً یک میز انتخاب کنید':'Please choose a table.','رزرو با موفقیت ثبت شد':'Reservation confirmed successfully.','به سبد خرید اضافه شد':'Added to cart.','سبد خرید خالی است':'Your cart is empty.','نظر شما ثبت شد':'Your review was submitted.','ثبت‌نام آزمایشی انجام شد':'Demo registration completed.','صندلی شما رزرو شد':'Your seat has been reserved.','به لیست شرکت‌کنندگان اضافه شدی':'You were added to the attendee list.','Gift Card ساخته شد':'Gift Card created.'
 };
+const REVERSE=Object.fromEntries(Object.entries(T).map(([fa,en])=>[en,fa]));
 const A={'فضای کافه و قهوه تخصصی':'Café interior and specialty coffee','QR منوی کافه':'Café menu QR code'};
 // Stage 10: event-driven localization. No MutationObserver and no reload loops.
 const originals=new WeakMap();
+function savedLanguage(){try{return localStorage.getItem('lang')==='fa'?'fa':'en'}catch{return 'en'}}
+// Cache original text nodes once: language switching does not rescan the full DOM.
+let staticNodes=[];
+function indexStaticNodes(){const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;staticNodes=[];while((n=walker.nextNode())){const parent=n.parentElement;if(!parent||['SCRIPT','STYLE','NOSCRIPT','TEXTAREA'].includes(parent.tagName))continue;originals.set(n,n.nodeValue);staticNodes.push(n);}}
 function translateText(s){const trim=s.trim();if(!trim)return s;let out=T[trim];if(!out){const m=trim.match(/^میز (\d+)$/);if(m)out='Table '+m[1];else if(trim.startsWith('تخفیف:'))out=trim.replace('تخفیف:','Discount:');else return s;}return s.replace(trim,out);}
 function apply(root=document){
- const lang=localStorage.getItem('lang')==='fa'?'fa':'en';const en=lang==='en';
+ const lang=savedLanguage();const en=lang==='en';
  document.documentElement.lang=lang;document.documentElement.dir=en?'ltr':'rtl';document.body?.classList.toggle('en',en);
  const scope=root.nodeType===9?root.body:root;if(!scope)return;
- const walker=document.createTreeWalker(scope,NodeFilter.SHOW_TEXT);let node;
- while((node=walker.nextNode())){
+ const nodes=scope===document.body?staticNodes:(()=>{const a=[];const w=document.createTreeWalker(scope,NodeFilter.SHOW_TEXT);let n;while((n=w.nextNode()))a.push(n);return a})();
+ for(const node of nodes){if(!node.isConnected)continue;
   const parent=node.parentElement;if(!parent||['SCRIPT','STYLE','NOSCRIPT','TEXTAREA'].includes(parent.tagName))continue;
   if(!originals.has(node))originals.set(node,node.nodeValue);
-  const original=originals.get(node);const desired=en?translateText(original):original;
+  const original=originals.get(node);const desired=en?translateText(original):(REVERSE[original.trim()]?original.replace(original.trim(),REVERSE[original.trim()]):original);
   if(node.nodeValue!==desired)node.nodeValue=desired;
  }
  scope.querySelectorAll?.('[alt]').forEach(el=>{if(!el.dataset.originalAlt)el.dataset.originalAlt=el.alt;el.alt=en?(A[el.dataset.originalAlt]||el.dataset.originalAlt):el.dataset.originalAlt});
  const btn=document.getElementById('langBtn');if(btn){btn.textContent=en?'فارسی':'English';btn.setAttribute('aria-label',en?'Switch to Persian':'تغییر زبان به انگلیسی');}
 }
-function setLanguage(lang){if(!['fa','en'].includes(lang))return;localStorage.setItem('lang',lang);apply();
+function setLanguage(lang){if(!['fa','en'].includes(lang))return;try{localStorage.setItem('lang',lang)}catch{}apply();
  try{if(typeof renderProducts==='function')renderProducts();if(typeof renderCart==='function')renderCart();}catch(e){console.warn('Localized product refresh failed',e)}
  document.dispatchEvent(new CustomEvent('cafe:languagechange',{detail:{lang}}));
 }
-window.cafeI18n={apply,setLanguage,t:T};
+window.cafeI18n={apply,setLanguage,refresh(root=document){if(root===document){indexStaticNodes();apply()}else apply(root)},t:T};
 document.addEventListener('DOMContentLoaded',()=>{
- if(!['fa','en'].includes(localStorage.getItem('lang')))localStorage.setItem('lang','en');
- apply();const btn=document.getElementById('langBtn');if(btn)btn.addEventListener('click',()=>setLanguage(document.documentElement.lang==='en'?'fa':'en'));
+ try{if(!['fa','en'].includes(localStorage.getItem('lang')))localStorage.setItem('lang','en')}catch{}
+ indexStaticNodes();apply();const btn=document.getElementById('langBtn');if(btn)btn.addEventListener('click',()=>setLanguage(document.documentElement.lang==='en'?'fa':'en'));
+ document.addEventListener('cafe:contentupdated',e=>{const root=e.detail?.root||document;window.cafeI18n.refresh(root)});
 });
 })();

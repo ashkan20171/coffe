@@ -1,0 +1,8 @@
+/* Stage 15: legible controls and stable responsive navigation */
+.s15-noscript{padding:1rem;text-align:center;background:#2b1b13;color:#fff3de;font:500 14px/1.7 system-ui,sans-serif}
+#langBtn{min-width:78px;white-space:nowrap;touch-action:manipulation}
+.top{z-index:1000} .navlinks a,.actions button{transition:background-color .18s ease,color .18s ease}
+:focus-visible{outline:3px solid #e8ad58;outline-offset:3px}
+img{max-width:100%;height:auto} img[loading="lazy"]{content-visibility:auto}
+@media(max-width:780px){.nav{gap:10px}.actions{gap:6px}.actions .iconbtn{min-width:40px}}
+@media(prefers-reduced-motion:reduce){.navlinks a,.actions button{transition:none}}

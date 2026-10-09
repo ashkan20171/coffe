@@ -1,0 +1,7 @@
+/* Stage 16: navigation visibility and stable language control */
+.top{position:sticky;top:0;z-index:1000}
+.top .nav{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.top .actions{display:flex;align-items:center;gap:8px;flex-shrink:0}
+#langBtn{min-width:76px;min-height:42px;cursor:pointer;position:relative;z-index:3;white-space:nowrap}
+#langBtn:focus-visible{outline:3px solid #e6b66c;outline-offset:3px}
+@media(max-width:760px){.top .nav{justify-content:space-between}.top .actions{margin-inline-start:auto}.top .navlinks{order:4;width:100%}}
