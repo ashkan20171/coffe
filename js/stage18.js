@@ -1,0 +1,7 @@
+/* Stage 18: non-invasive navigation state and localized page marker. */
+(()=>{'use strict';
+const names={en:{'index.html':'Discover','product.html':'Coffee details','blog.html':'Coffee journal','events.html':'Events','gift-card.html':'Gift cards','checkout.html':'Checkout','dashboard.html':'My account','auth.html':'Welcome','qr-menu.html':'Digital menu'},fa:{'index.html':'کشف طعم','product.html':'جزئیات قهوه','blog.html':'مجله قهوه','events.html':'رویدادها','gift-card.html':'کارت هدیه','checkout.html':'تسویه حساب','dashboard.html':'حساب من','auth.html':'خوش آمدید','qr-menu.html':'منوی دیجیتال'}};
+function render(){const file=location.pathname.split('/').pop()||'index.html';const lang=document.documentElement.lang==='fa'?'fa':'en';const nav=document.querySelector('#primary-navigation');if(nav){nav.querySelectorAll('a').forEach(a=>{const href=a.getAttribute('href')||'';if(href.split('#')[0]===file)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current')})}const main=document.querySelector('main');if(!main)return;let marker=main.querySelector('.s18-page-title');if(!marker){marker=document.createElement('span');marker.className='s18-page-title';const section=main.querySelector('section .container');if(section)section.prepend(marker);else main.prepend(marker)}marker.textContent='✦ '+(names[lang][file]||names[lang]['index.html']);}
+if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',render,{once:true});else render();
+document.addEventListener('cafe:languagechange',render);
+})();

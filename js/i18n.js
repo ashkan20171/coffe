@@ -17,7 +17,9 @@ const REVERSE=Object.fromEntries(Object.entries(T).map(([fa,en])=>[en,fa]));
 const A={'فضای کافه و قهوه تخصصی':'Café interior and specialty coffee','QR منوی کافه':'Café menu QR code'};
 // Stage 10: event-driven localization. No MutationObserver and no reload loops.
 const originals=new WeakMap();
-function savedLanguage(){try{return localStorage.getItem('lang')==='fa'?'fa':'en'}catch{return 'en'}}
+let activeLanguage='en';
+function savedLanguage(){return activeLanguage;}
+try{activeLanguage=localStorage.getItem('lang')==='fa'?'fa':'en'}catch{}
 // Cache original text nodes once: language switching does not rescan the full DOM.
 let staticNodes=[];
 function indexStaticNodes(){const walker=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT);let n;staticNodes=[];while((n=walker.nextNode())){const parent=n.parentElement;if(!parent||['SCRIPT','STYLE','NOSCRIPT','TEXTAREA'].includes(parent.tagName))continue;originals.set(n,n.nodeValue);staticNodes.push(n);}}
@@ -36,7 +38,7 @@ function apply(root=document){
  scope.querySelectorAll?.('[alt]').forEach(el=>{if(!el.dataset.originalAlt)el.dataset.originalAlt=el.alt;el.alt=en?(A[el.dataset.originalAlt]||el.dataset.originalAlt):el.dataset.originalAlt});
  const btn=document.getElementById('langBtn');if(btn){btn.textContent=en?'فارسی':'English';btn.setAttribute('aria-label',en?'Switch to Persian':'تغییر زبان به انگلیسی');}
 }
-function setLanguage(lang){if(!['fa','en'].includes(lang))return;try{localStorage.setItem('lang',lang)}catch{}apply();
+function setLanguage(lang){if(!['fa','en'].includes(lang))return;activeLanguage=lang;try{localStorage.setItem('lang',lang)}catch{}apply();
  try{if(typeof renderProducts==='function')renderProducts();if(typeof renderCart==='function')renderCart();}catch(e){console.warn('Localized product refresh failed',e)}
  document.dispatchEvent(new CustomEvent('cafe:languagechange',{detail:{lang}}));
 }

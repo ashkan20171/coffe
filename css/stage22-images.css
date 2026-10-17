@@ -1,0 +1,8 @@
+/* Stage 22: image visibility across languages. */
+html[lang="en"] .hero-grid > img.s6-fallback-art,html[lang="fa"] .hero-grid > img.s6-fallback-art{display:block!important;width:100%;height:auto;max-height:520px;object-fit:cover;}
+.hero-grid:has(> .s6-showcase){grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.hero-grid > .s6-showcase{grid-column:2;grid-row:2;min-height:280px}
+.hero-grid > img.s6-fallback-art{grid-column:2;grid-row:1}
+.s6-reveal:not(.s6-visible){opacity:1!important;transform:none!important}
+img{visibility:visible}img[data-image-error="true"]{object-fit:contain;background:#ead7be}
+@media(max-width:900px){.hero-grid:has(> .s6-showcase){grid-template-columns:1fr}.hero-grid > .s6-showcase,.hero-grid > img.s6-fallback-art{grid-column:1;grid-row:auto}}
