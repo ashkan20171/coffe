@@ -1,0 +1,4 @@
+/* Stage 19: opt-in diagnostics, no layout changes in normal browsing. */
+.s19-diagnostics{position:fixed;inset:auto 1rem 1rem auto;z-index:99999;max-width:min(26rem,calc(100vw - 2rem));padding:1rem;border:1px solid #d6b67e;border-radius:1rem;background:#211710;color:#fff4df;box-shadow:0 12px 40px #0008;font:14px/1.6 system-ui,sans-serif;overflow-wrap:anywhere}
+.s19-diagnostics button{margin:.4rem .4rem 0 0;padding:.45rem .7rem;border-radius:.5rem;background:#d6b67e;color:#24180f;border:0;cursor:pointer}
+[dir=rtl] .s19-diagnostics{inset:auto auto 1rem 1rem}

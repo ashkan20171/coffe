@@ -1,0 +1,16 @@
+/* Stage 18: cohesive premium inner pages; light-weight, no runtime animation loops */
+:root{--s18-gold:#dfb879;--s18-espresso:#211713;--s18-cream:#fff4df}
+body{background-image:radial-gradient(ellipse at 85% 4%,rgba(208,155,79,.12),transparent 42%),linear-gradient(155deg,#211713,#34231c 48%,#1b1715);background-attachment:fixed}
+.top{backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-bottom:1px solid rgba(223,184,121,.2)}
+.brand{font-weight:850;letter-spacing:.025em;text-shadow:0 2px 16px rgba(223,184,121,.17)}
+.navlinks a{transition:color .2s ease,background-color .2s ease;border-radius:9px}
+.navlinks a:hover,.navlinks a[aria-current=page]{color:var(--s18-gold);background:rgba(223,184,121,.10)}
+main{min-height:65vh}main>section:first-child{position:relative;isolation:isolate}main>section:first-child:before{content:'';position:absolute;inset:0 0 auto;min-height:310px;z-index:-1;pointer-events:none;background:linear-gradient(90deg,rgba(23,15,12,.88),rgba(23,15,12,.22)),url('../images/coffee-3d-art.webp') center 48%/cover no-repeat;opacity:.38}
+main .container>h1,main .container>h2{letter-spacing:-.025em;text-wrap:balance}
+.panel,.card,.product-card{border:1px solid rgba(223,184,121,.18);box-shadow:0 12px 38px rgba(0,0,0,.18);transition:transform .22s ease,box-shadow .22s ease}
+@media(hover:hover){.panel:hover,.card:hover,.product-card:hover{transform:translateY(-3px);box-shadow:0 18px 45px rgba(0,0,0,.25)}}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid var(--s18-gold);outline-offset:3px}
+[dir=rtl] .navlinks,[dir=rtl] .actions{direction:rtl}
+.s18-page-title{display:inline-flex;align-items:center;gap:.5rem;margin:1rem 0;padding:.45rem .8rem;border:1px solid rgba(223,184,121,.32);border-radius:999px;color:var(--s18-gold);background:rgba(33,23,19,.65);font-size:.8rem;font-weight:700}
+@media(max-width:700px){body{background-attachment:scroll}main>section:first-child:before{min-height:220px;background-position:60% center}.navlinks a{min-height:44px;display:flex;align-items:center}}
+@media(prefers-reduced-motion:reduce){.panel,.card,.product-card,.navlinks a{transition:none!important}}

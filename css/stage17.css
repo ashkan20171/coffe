@@ -1,0 +1,8 @@
+/* Stage 17: stable navigation and responsive polish */
+.top{position:sticky;top:0;z-index:1000;backdrop-filter:blur(14px)}
+.top .nav{min-height:70px;gap:12px}.top .actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#langBtn{min-width:74px;white-space:nowrap;font-weight:700}
+.top a:focus-visible,.top button:focus-visible{outline:3px solid #e8b86a;outline-offset:3px}
+[dir="rtl"] .navlinks{direction:rtl}[dir="ltr"] .navlinks{direction:ltr}
+@media(max-width:860px){.top .nav{flex-wrap:wrap}.top .actions{margin-inline-start:auto}.navlinks.open{max-height:min(70vh,500px);overflow-y:auto}}
+@media(prefers-reduced-motion:reduce){.top *{transition:none!important;animation:none!important}}
